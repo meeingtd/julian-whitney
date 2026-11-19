@@ -1,0 +1,170 @@
+/* Portfolio v2. Tokens are named for their job. One face for words, a mono face for what is true this minute, one accent. */
+:root{
+  --color-bg:#0b0c12;              /* the room at night: page ground, the cover, the veil */
+  --color-surface:#15110e;         /* the work sheet: walnut in shade */
+  --color-text-primary:#f3eadb;    /* his words and names */
+  --color-text-secondary:#b9ae9c;  /* times, notes, stops not in focus */
+  --color-action:#eda94f;          /* actionable only: links and things you can open (lamp amber) */
+  --color-light-none:#fff;         /* the light laid over a painted scene by day: no change */
+  --mask-ink:#000;                 /* the opaque end of a fade mask */
+
+  --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;--space-6:1.5rem;--space-8:2rem;--space-12:3rem;--space-16:4rem;--space-24:6rem;
+  --radius-control:.5rem;--radius-container:1rem;
+
+  --ease:cubic-bezier(.22,1,.36,1); /* the one curve */
+  --dur-fast:.2s;--dur-mid:.5s;--dur-slow:.9s; /* exits, entries, the camera */
+
+  --font:"Familjen Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-data:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace; /* live data only: clocks, the right-now labels, the count */
+  --size-small:.9375rem;
+  --size-body:clamp(1.125rem,1rem + .45vw,1.375rem);
+  --size-display:clamp(1.75rem,1.1rem + 2.3vw,4rem);   /* his statement on the wall, a place's name */
+  --size-hero:clamp(2.75rem,1.5rem + 5vw,6.5rem);      /* a page's title, the end */
+  --gutter:calc(clamp(1rem,.25rem + 3.5vw,3.5rem) + max(env(safe-area-inset-left,0px),env(safe-area-inset-right,0px)));
+  --inset-top:env(safe-area-inset-top,0px);--inset-bottom:env(safe-area-inset-bottom,0px); /* the notch and the home bar on a phone */
+  --vh:1vh;                        /* one hundredth of the window that is really showing */
+  color-scheme:dark;
+}
+@supports (height:1dvh){:root{--vh:1dvh}}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--color-bg);color:var(--color-text-primary);font:400 var(--size-body)/1.45 var(--font);overflow:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,p,ol,ul,dl,dd{margin:0;padding:0}
+p,dd{text-wrap:pretty;overflow-wrap:break-word}
+ol,ul{list-style:none}
+h1{font-size:var(--size-hero);font-weight:600;line-height:1;text-wrap:balance}
+h2{font-size:var(--size-body);font-weight:600;line-height:1.25}
+img,video{display:block;max-width:100%;height:auto}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:inherit}
+a{color:var(--color-action)}
+a,button{touch-action:manipulation}
+:focus-visible{outline:.125rem solid var(--color-action);outline-offset:var(--space-1);border-radius:var(--radius-control)}
+h1:focus{outline:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+[hidden]{display:none!important}
+
+/* ---------- the fixed layers, back to front ---------- */
+#grade,#desk,#veil,#cover,#route,#marks{position:fixed;inset:0}
+#grade{z-index:1;pointer-events:none;mix-blend-mode:multiply;background:var(--color-light-none)}
+#desk{z-index:2;background:var(--color-bg);visibility:hidden}
+#desk canvas{display:block;width:100%;height:100%}
+#veil{z-index:3;background:var(--color-bg);opacity:0;pointer-events:none;transition:opacity var(--dur-fast) linear}
+#veil.on{opacity:1}
+#cover{z-index:4;background:var(--color-bg);display:grid;place-items:center;padding-bottom:calc(14*var(--vh));transition:opacity var(--dur-mid) var(--ease)}
+#cover.out{opacity:0;pointer-events:none}
+#count{font:400 clamp(5rem,24vw,20rem)/1 var(--font-data)}
+#route{z-index:5;width:100%;height:100%;pointer-events:none}
+#route path{fill:none;stroke:var(--color-text-secondary);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+#marks{z-index:6;pointer-events:none}
+
+/* a place on the globe: a dot you can open, with its name and its time now */
+.mark{position:absolute;left:0;top:0;display:flex;align-items:center;gap:var(--space-2);padding:var(--space-3);margin:calc(-1*var(--space-3) - var(--space-1));pointer-events:auto;font-size:var(--size-small);line-height:1.2;white-space:nowrap;visibility:hidden;color:inherit;text-decoration:none;text-shadow:0 0 .5rem var(--color-bg),0 0 .125rem var(--color-bg)}
+.mark.l{translate:calc(-100% + 2*var(--space-3) + var(--space-2)) 0}
+.mark.l i{order:3}
+.mark.show{visibility:visible;will-change:transform}
+.mark i{flex:none;width:var(--space-2);height:var(--space-2);border-radius:50%;background:var(--color-action)}
+.mark b{font-weight:600}
+.mark span{color:var(--color-text-secondary);font-family:var(--font-data)}
+body[data-view="about"] .mark{pointer-events:none}
+/* on the desk the dots stay quiet: a name and time show only for the one you point at or tab to */
+body[data-view="home"] .mark b,body[data-view="home"] .mark span{visibility:hidden}
+body[data-view="home"] .mark:hover b,body[data-view="home"] .mark:hover span,body[data-view="home"] .mark:focus-visible b,body[data-view="home"] .mark:focus-visible span{visibility:visible}
+body[data-view="about"] .mark i{background:var(--color-text-primary)} /* here the dot marks the place in focus, it opens nothing */
+
+#bar{position:fixed;z-index:8;inset:0 0 auto 0;display:flex;justify-content:space-between;gap:var(--space-4);padding:calc(var(--space-6) + var(--inset-top)) var(--gutter) var(--space-6);pointer-events:none;font-size:var(--size-small)}
+#bar a{pointer-events:auto;color:var(--color-text-primary);text-decoration:none;font-weight:600}
+#nav{display:flex;gap:var(--space-6)}
+#bar #nav a{color:var(--color-action);font-weight:400;text-decoration:none}
+#bar #nav a:hover{text-decoration:underline;text-underline-offset:.25em;text-decoration-thickness:.0625rem}
+#home-link:hover,#stops h2 a:hover{text-decoration:underline;text-underline-offset:.25em;text-decoration-thickness:.0625rem}
+#bar #nav a[aria-current]{color:var(--color-text-primary);text-decoration:none}
+body[data-view="home"] #nav a[data-v="home"]{display:none}
+body[data-view="work"] #bar{background:var(--color-surface)}
+
+main{position:relative;z-index:7}
+.view{position:fixed;inset:0;pointer-events:none;opacity:0;transition:opacity var(--dur-fast) linear}
+.view.on{opacity:1;transition:opacity var(--dur-mid) var(--ease)}
+.lede{max-width:34ch;text-wrap:pretty}
+.body{max-width:62ch;color:var(--color-text-secondary)}
+.ways{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-8)}
+.go{color:var(--color-action);text-decoration:underline;text-underline-offset:.25em;text-decoration-thickness:.0625rem}
+.go:hover{text-decoration-thickness:.125rem}
+.go.filler{color:var(--color-text-secondary);text-decoration-style:dashed}
+
+/* ---------- home: the desk, his name, the line, right now ---------- */
+#home .intro{position:absolute;left:var(--gutter);top:calc(var(--space-24) + var(--space-4) + var(--inset-top));pointer-events:auto;z-index:1}
+.statement{font-size:var(--size-display);font-weight:600;line-height:1.08;max-width:19em;text-wrap:balance}
+/* his words sit on the bare wall above the room; a soft shade there keeps them readable */
+#home::before{content:"";position:absolute;inset:0 0 auto 0;height:40%;background:linear-gradient(to bottom,var(--color-bg),transparent)}
+#now{position:absolute;right:var(--gutter);top:calc(var(--space-24) + var(--space-6) + var(--inset-top));z-index:1;display:grid;gap:var(--space-2);font-size:var(--size-small);pointer-events:auto}
+#now div{display:grid;grid-template-columns:var(--space-24) auto;gap:var(--space-4);align-items:baseline}
+#now dt{color:var(--color-text-secondary);font-family:var(--font-data)}
+#now-time{font-family:var(--font-data)}
+
+/* ---------- about: the globe followed along its line ---------- */
+#about{overflow-y:auto;overscroll-behavior:contain;scroll-padding-top:calc(35*var(--vh))}
+#about.on{pointer-events:auto}
+#about .col::after{content:"";position:fixed;inset:0 auto auto 0;width:min(38rem,52vw);height:calc(var(--space-24) + var(--inset-top));background:linear-gradient(to bottom,var(--color-bg) 50%,transparent);pointer-events:none}
+#about::before{content:"";position:fixed;inset:0;background:linear-gradient(to right,var(--color-bg) 0,var(--color-bg) min(40rem,52vw),transparent calc(min(40rem,52vw) + var(--space-24)));pointer-events:none}
+#about .col{position:relative;width:min(34rem,46vw);padding:calc(var(--space-24) + var(--inset-top)) 0 calc(40*var(--vh)) var(--gutter);display:grid;gap:var(--space-8)}
+#stops{display:grid;gap:var(--space-16);padding:var(--space-12) 0}
+#stops li{display:grid;gap:var(--space-2);color:var(--color-text-secondary)}
+#stops li.active{color:var(--color-text-primary)}
+#stops h2 a{color:inherit;text-decoration:none;font-weight:600}
+#stops .when{font:400 var(--size-small)/1.45 var(--font-data);color:var(--color-text-secondary)}
+#stops .ways{padding-top:var(--space-2)}
+
+/* ---------- a place: its painted scene at this minute ---------- */
+#place.on{pointer-events:auto}
+#place::before{content:"";position:absolute;inset:auto 0 0 0;height:48%;background:linear-gradient(to top,var(--color-bg),transparent);pointer-events:none}
+#place .caption{position:absolute;left:var(--gutter);right:var(--gutter);bottom:calc(var(--space-12) + var(--inset-bottom));display:grid;gap:var(--space-3);max-width:40rem}
+#place h1{font-size:var(--size-display);line-height:1.08}
+#place-time{font:400 var(--size-small)/1.45 var(--font-data);color:var(--color-text-secondary)}
+#place .lede{max-width:44ch;padding:var(--space-2) 0}
+
+/* ---------- the work: rows, then the end ---------- */
+#work.on{pointer-events:auto}
+#work .sheet{position:absolute;inset:0;overflow-y:auto;overscroll-behavior:contain;background:var(--color-surface);padding:calc(var(--space-24) + var(--inset-top)) var(--gutter) calc(var(--space-24) + var(--inset-bottom));transform:translateY(var(--space-8));transition:transform var(--dur-fast) var(--ease)}
+#work.on .sheet{transform:none;transition:transform var(--dur-mid) var(--ease)}
+#work .sheet>*{max-width:100rem;margin-inline:auto}
+/* the title with its note beside it, then the projects as a gallery: several in view at once, each a still you can play */
+#work .top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:var(--space-6) var(--space-12)}
+#work .top .body{max-width:28rem;padding-bottom:var(--space-2)}
+#projects{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,28rem),1fr));gap:var(--space-16) var(--space-8);padding:var(--space-16) 0 var(--space-24)}
+#projects li{display:grid;gap:var(--space-4);align-content:start;scroll-margin-top:calc(var(--space-24) + var(--inset-top))}
+#projects .text{display:grid;gap:var(--space-2)}
+#projects p{color:var(--color-text-secondary);max-width:52ch}
+.media{display:block;width:100%;border-radius:var(--radius-container);overflow:hidden;aspect-ratio:16/10;background:var(--color-bg)}
+.media img,.media video{width:100%;height:100%;object-fit:cover}
+#end{display:grid;gap:var(--space-4);padding-top:var(--space-24)}
+#end h2{font-size:var(--size-hero);line-height:1}
+
+/* ---------- wide screens: the bar speaks at reading size ---------- */
+@media (min-width:48rem){#bar{font-size:var(--size-body)}}
+/* until there is room beside his statement, right now sits along the bottom edge */
+@media (max-width:63.99rem){
+  #now{left:var(--gutter);right:var(--gutter);top:auto;bottom:calc(var(--space-8) + var(--inset-bottom))}
+  #home::after{content:"";position:absolute;inset:auto 0 0 0;height:26%;background:linear-gradient(to top,var(--color-bg) 30%,transparent)}
+}
+
+/* ---------- narrow screens ---------- */
+@media (max-width:47.99rem){
+  #home .intro{right:var(--gutter);top:calc(var(--space-16) + var(--space-4) + var(--inset-top))}
+  #home::before{inset:0 0 auto 0;height:60%;background:linear-gradient(to bottom,var(--color-bg) 20%,transparent)}
+  body:not([data-view="home"]) #home-link{display:none}
+  #cover{place-items:end center;padding-bottom:calc(30*var(--vh))}
+  #about::before{background:linear-gradient(to top,var(--color-bg) 0,var(--color-bg) 46%,transparent 62%)}
+  #about .col{width:auto;padding:calc(54*var(--vh)) var(--gutter) calc(30*var(--vh))}
+  #about{scroll-padding-top:calc(56*var(--vh))}
+  #about.view{-webkit-mask-image:linear-gradient(to bottom,transparent 45%,var(--mask-ink) 54%);mask-image:linear-gradient(to bottom,transparent 45%,var(--mask-ink) 54%)}
+  #about .col::after{content:none}
+  #home .intro,#now{z-index:1}
+  .mark span{display:none}
+  #projects{gap:var(--space-12)}
+}
+
+/* reduced motion: changes are instant with a mouse, a 200ms cross-fade on touch */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:0s!important}
+  @media (pointer:coarse){.view,.view.on,#cover,#veil{transition:opacity .2s linear!important}}
+}

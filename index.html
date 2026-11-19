@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" class="live">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Julian Whitney</title>
+<meta name="description" content="Julian Whitney. Born in Concord, raised partly in Doha, studied at Wake Forest and in Barcelona. He builds tools with Claude Code.">
+<meta name="theme-color" content="#0b0c12">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;600&family=Geist+Mono:wght@400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body data-view="home">
+
+<!-- the painted scenes draw into boxes the engine inserts just before #morph -->
+<svg id="morph" aria-hidden="true" width="0" height="0"></svg>
+<div id="grade" aria-hidden="true"></div>
+<div id="desk" aria-hidden="true"></div>
+<div id="veil" aria-hidden="true"></div>
+
+<!-- the way in: the count from 2003 to this year, over the desk while it loads -->
+<div id="cover">
+  <p id="count" aria-hidden="true">2003</p>
+  <p class="sr" role="status">Loading the desk… Press any key to skip.</p>
+</div>
+
+<svg id="route" aria-hidden="true"><path/></svg>
+
+<header id="bar">
+  <a id="home-link" href="#/">Julian Whitney</a>
+  <nav id="nav" aria-label="Main"><a href="#/" data-v="home">Home</a><a href="#/about" data-v="about">Where I’ve been</a><a href="#/work" data-v="work">The work</a></nav>
+</header>
+
+<main>
+  <section id="home" class="view" aria-labelledby="h-name">
+    <div class="intro">
+      <h1 id="h-name" class="sr">Julian Whitney</h1>
+      <p class="statement">I got into building things young. It started with Legos, and I’ve been putting things together ever since.</p>
+    </div>
+    <dl id="now" aria-label="Right now">
+      <div><dt>Now</dt><dd id="now-time"></dd></div>
+      <div><dt>Listening</dt><dd id="now-song"></dd></div>
+      <div><dt>Reading</dt><dd id="now-book"></dd></div>
+    </dl>
+  </section>
+
+  <section id="about" class="view" aria-labelledby="h-about" hidden>
+    <div class="col">
+      <h1 id="h-about">Where I’ve been</h1>
+      <!-- Thread line: Julian's spoken words (18 Nov 2026), tidied by Claude at his request. For his review. -->
+      <p class="lede">Each place gave me a new understanding of human consciousness, and a greater sense that even though we all come from different places, we share one moment, the present.</p>
+      <ol id="stops"></ol>
+      <p class="body">I grew up kind of all over the place. I’m from Concord, Massachusetts, and spent four years abroad in Doha, Qatar, where I went to Lycée Bonaparte, learned French and got to see the world. I’m Algerian, ethnically French and American, and that mix is a big part of me. I moved to North Carolina for four years of school at Wake Forest, with a semester in Barcelona, and spending time kind of everywhere has been a highlight of my life. Now I work in FP&amp;A at an aerospace and defense manufacturer and build tools with Claude Code.</p>
+      <p class="ways"><a class="go" href="#/work">See the work</a></p>
+    </div>
+  </section>
+
+  <section id="place" class="view" aria-labelledby="h-place" hidden>
+    <div class="caption">
+      <h1 id="h-place"></h1>
+      <p id="place-time"></p>
+      <p class="lede" id="place-line"></p>
+      <p class="ways" id="place-ways"></p>
+    </div>
+  </section>
+
+  <section id="work" class="view" aria-labelledby="h-work" hidden>
+    <div class="sheet">
+      <div class="top">
+        <h1 id="h-work">The work</h1>
+        <p class="body">More projects are in progress, including a public-data fundraising tool, and will appear here once cleared to share.</p>
+      </div>
+      <ul id="projects"></ul>
+      <div id="end">
+        <h2>Book a time</h2>
+        <p class="ways">
+          <span class="go filler" id="book">Booking link to come</span>
+          <a class="go" href="https://www.linkedin.com/in/julian-whitney/" rel="noopener">Connect on LinkedIn</a>
+          <a class="go" href="mailto:julianwhitney@alumni.wfu.edu">julianwhitney@alumni.wfu.edu</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- places on the globe; after the page text so the keyboard reaches his words and the work first -->
+<div id="marks"></div>
+
+<!-- stills the laptop on the desk cross-fades through -->
+<div id="stills" hidden>
+  <img data-p="homebase" src="media/stills/homebase-1.jpg" alt="">
+  <img data-p="hexcel" src="media/stills/hexcel-1.jpg" alt="">
+  <img data-p="scoreboard" src="media/stills/scoreboard-1.jpg" alt="">
+  <img data-p="validation" src="media/stills/validation-1.jpg" alt="">
+  <img data-p="motion" src="media/stills/motion-1.jpg" alt="">
+  <img data-p="usage" src="media/stills/usage-1.jpg" alt="">
+</div>
+
+<script>window.CUTW=()=>[-9,-8,8,9];</script>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"}}</script>
+<!-- the page script runs first; it brings in the Earth data, the globe and the desk after the first paint -->
+<script type="module" src="js/app.js"></script>
+<script src="js/painted/00_engine.js" defer></script>
+<script src="js/painted/12_walden.js" defer></script>
+<script src="js/painted/14_tennis.js" defer></script>
+<script src="js/painted/20_doha.js" defer></script>
+<script src="js/painted/30_dunes.js" defer></script>
+<script src="js/painted/35_wakeforest.js" defer></script>
+<script src="js/painted/40_barcelona.js" defer></script>
+<script src="js/painted/45_boston.js" defer></script>
+<script src="js/painted/50_newyork.js" defer></script>
+</body>
+</html>
